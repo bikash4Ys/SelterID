@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evacuation Face Recognition</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Evacuation Registration</h1>
+
+        <form id="registrationForm" enctype="multipart/form-data">
+            <label for="name">Full Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="phone">Phone:</label>
+            <input type="text" id="phone" name="phone" required>
+
+            <label for="photo">Upload Photo:</label>
+            <div style="display: flex; align-items: center;">
+                <input type="file" id="photo" name="photo" accept="image/*" required style="margin-right: 10px;">
+                <button type="button" id="openCameraBtn">Open Camera</button>
+            </div>
+
+            <video id="video" width="320" height="240" autoplay style="display:none;"></video>
+            <button type="button" id="captureBtn" style="display:none;">Capture Image</button>
+            <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
+
+            <button type="submit">Register</button>
+        </form>
+
+        <div id="responseMessage"></div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
