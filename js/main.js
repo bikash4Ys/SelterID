@@ -6,7 +6,7 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
 
     try {
         // Send form data to the backend PHP API
-        const response = await fetch('http://localhost/MyProject/register.php', {
+        const response = await fetch(API_URL, {
             method: 'POST',
             body: formData,
         });
