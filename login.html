@@ -20,12 +20,10 @@
     </style>
 </head>
 <body>
-            <!-- Navbar -->
+    <!-- Navbar -->
     <nav class="p-4 shadow-md fixed w-full top-0 z-10">
         <div class="container mx-auto flex justify-between items-center">
             <a href="index.html"><h1 class="text-xl font-bold text-purple-600">SHELTER ID</h1></a>
-             <!-- <h1><a href="index.html"><img src="Screenshot 2024-10-09 121322.png" alt=""></a></h1>
-             <h1><a href="index.html"></a></h1> -->
             <ul class="flex space-x-4">
                 <li><a href="#home" class="text-purple-500 hover:text-purple-700">Home</a></li>
                 <li><a href="login.html" class="text-purple-500 hover:text-purple-700">Login</a></li>
@@ -55,8 +53,14 @@
                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500">
             </div>
 
+            <!-- Show Password Checkbox -->
+            <div>
+                <input type="checkbox" id="showPassword" class="mr-2">
+                <label for="showPassword" class="text-sm">Show Password</label>
+            </div>
+
             <!-- Login Button -->
-            <button type="submit" class="w-full bg-purple-500 text-white py-2 rounded-md">Login</button>
+            <a href="dashboard.html"><button type="submit" class="w-full bg-purple-500 text-white py-2 rounded-md">Login</button></a>
 
             <!-- Link to Registration -->
             <p class="text-sm text-center mt-4">
@@ -86,6 +90,16 @@
                 // Perform post-login actions or redirection (e.g., window.location.href = 'dashboard.html')
             } else {
                 document.getElementById('loginMessage').innerHTML = '<p class="text-red-500">Invalid email or password.</p>';
+            }
+        });
+
+        // Toggle password visibility
+        document.getElementById('showPassword').addEventListener('change', function() {
+            const passwordField = document.getElementById('password');
+            if (this.checked) {
+                passwordField.type = 'text';
+            } else {
+                passwordField.type = 'password';
             }
         });
     </script>
