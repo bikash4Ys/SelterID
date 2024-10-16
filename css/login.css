@@ -1,0 +1,14 @@
+/* Background and layout */
+body {
+    background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 50%, #ffecd2 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Navbar styling */
+nav {
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+}

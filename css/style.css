@@ -1,65 +1,66 @@
+/* Background and layout */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-}
-
-.container {
-    max-width: 400px;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-}
-
-h1 {
-    text-align: center;
-    color: #333;
-}
-
-form {
+    background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 50%, #ffecd2 100%);
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
+    margin: 0; /* Ensure no default margin is applied */
 }
 
-label {
-    margin: 10px 0 5px;
+/* Navbar */
+nav {
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    padding: 1rem; /* Add some padding to the navbar */
 }
 
-input[type="text"],
-input[type="email"],
-input[type="file"] {
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
+/* Header section */
+header {
+    background: linear-gradient(135deg, #a6c1ee 0%, #fbc2eb 100%);
 }
 
+/* Fade-in animation */
+.fade-in {
+    opacity: 1;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.fade-in.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Button styling */
 button {
-    padding: 10px;
-    background-color: #28a745;
+    background-color: #6b46c1; /* Main button color */
     color: #fff;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-}
-#photo {
-    padding: 10px;
-    background-color: #e6e9e7;
-    color: #0e0707;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    transition: background-color 0.3s ease;
+    border: none; /* Remove default button border */
+    cursor: pointer; /* Change cursor to pointer on hover */
 }
 
+/* Button hover effect */
 button:hover {
-    background-color: #218838;
+    background-color: #553c9a; /* Darker shade on hover */
 }
 
-#responseMessage {
-    margin-top: 20px;
-    text-align: center;
-    color: #28a745;
+/* Additional button styles for consistency */
+a.button, /* To style links as buttons */
+button {
+    text-decoration: none; /* Remove underline from links */
+    display: inline-block; /* Make it behave like a block for padding */
+}
+
+/* Responsive styling */
+@media (max-width: 768px) {
+    /* Adjust navbar and header text size for smaller screens */
+    nav {
+        padding: 0.5rem; /* Reduce padding on smaller screens */
+    }
+    header h2 {
+        font-size: 2rem; /* Smaller header size */
+    }
 }
