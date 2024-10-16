@@ -1,49 +1,45 @@
 <?php
 // register.php
 
-// Database connection details
-$servername = "localhost"; // Hostname (usually localhost)
-$username = "root";         // Update with your database username
-$password = "";             // Update with your database password
-$dbname = "evacuation_system"; // Database name
+// Database connection
+$servername = "localhost";
+$username = "root";  // Update with your database username
+$password = "";      // Update with your database password
+$dbname = "evacuation_system";  // Database name
 
 // Create connection
-$conn = new mysqli($servername, $username, $password, $dbname); // Fixed the variable name $username
+$conn = new mysqli($servername, $username, $password, $dbname);
 
 // Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Initialize variables for form data
-$name = $email = $password = $gender = $dob = $address = $emergency_contact = "";
-
 // Process form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Collect and sanitize form data
     $name = $conn->real_escape_string($_POST['name']);
     $email = $conn->real_escape_string($_POST['email']);
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hash the password
-    $gender = $conn->real_escape_string($_POST['gender']);
-    $dob = $conn->real_escape_string($_POST['dob']);
-    $address = $conn->real_escape_string($_POST['address']);
-    $emergency_contact = $conn->real_escape_string($_POST['emergencyContact']);
+    $password = $_POST['password'];
+
+    // Hash the password
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT); 
 
     // Insert data into the database
     $sql = "INSERT INTO users (name, email, password, gender, dob, address, emergency_contact) 
-            VALUES ('$name', '$email', '$password', '$gender', '$dob', '$address', '$emergency_contact')";
+            VALUES ('$name', '$email', '$hashedPassword', 'male', '2000-01-01', 'Address', '123456789')";
 
     if ($conn->query($sql) === TRUE) {
-        // Redirect to success.php after successful registration
         header("Location: success.php");
         exit();
     } else {
-        $responseMessage = "Error: " . $sql . "<br>" . $conn->error;
+        echo "Error: " . $sql . "<br>" . $conn->error;
     }
 
-    $conn->close(); // Close the database connection
+    $conn->close();
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
