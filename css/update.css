@@ -1,0 +1,45 @@
+/* Background and layout for main content */
+body {
+    background-color: #f7fafc;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Form styling */
+form {
+    max-width: 100%;
+}
+
+/* Navbar styling */
+nav {
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Buttons */
+button {
+    background-color: #6b46c1;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #553c9a;
+}
+
+/* Input fields */
+input, select {
+    background-color: #fff;
+    border: 1px solid #d1d5db;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.375rem;
+    transition: border-color 0.2s ease;
+}
+
+input:focus, select:focus {
+    border-color: #805ad5;
+    outline: none;
+}

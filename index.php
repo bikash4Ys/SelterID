@@ -27,7 +27,7 @@
         <div class="container mx-auto">
             <h2 class="text-4xl font-bold mb-4">Welcome to the Evacuation Face Recognition System</h2>
             <p class="text-lg mb-6">Ensure safe evacuation during emergencies with advanced facial recognition technology.</p>
-            <a href="login.php" class="bg-purple-500 text-white px-6 py-3 rounded-md text-lg hover:bg-purple-700">Get Started</a>
+            <a href="php/login.php" class="bg-purple-500 text-white px-6 py-3 rounded-md text-lg hover:bg-purple-700">Get Started</a>
         </div>
     </header>
 

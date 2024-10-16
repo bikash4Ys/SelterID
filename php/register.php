@@ -15,31 +15,49 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// Initialize variables for form data
+$name = $email = $password = $gender = $dob = $address = $emergency_contact = $profile_image = "";
+$responseMessage = "";
+
 // Process form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Collect and sanitize form data
     $name = $conn->real_escape_string($_POST['name']);
     $email = $conn->real_escape_string($_POST['email']);
-    $password = $_POST['password'];
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hash the password
+    $gender = $conn->real_escape_string($_POST['gender']);
+    $dob = $conn->real_escape_string($_POST['dob']);
+    $address = $conn->real_escape_string($_POST['address']);
+    $emergency_contact = $conn->real_escape_string($_POST['emergencyContact']);
 
-    // Hash the password
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT); 
+    // Handle file upload
+    if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] == UPLOAD_ERR_OK) {
+        $target_dir = "uploads/"; // Path to the uploads directory
+        $target_file = $target_dir . basename($_FILES["profile_image"]["name"]);
+        
+        // Move the uploaded file to the target directory
+        if (move_uploaded_file($_FILES["profile_image"]["tmp_name"], $target_file)) {
+            // Success! Now save the path to the database
+            $profile_image = $conn->real_escape_string($target_file);
+        } else {
+            $responseMessage = "Error uploading the file.";
+        }
+    }
 
     // Insert data into the database
-    $sql = "INSERT INTO users (name, email, password, gender, dob, address, emergency_contact) 
-            VALUES ('$name', '$email', '$hashedPassword', 'male', '2000-01-01', 'Address', '123456789')";
+    $sql = "INSERT INTO users (name, email, password, gender, dob, address, emergency_contact, profile_image) 
+            VALUES ('$name', '$email', '$password', '$gender', '$dob', '$address', '$emergency_contact', '$profile_image')";
 
     if ($conn->query($sql) === TRUE) {
         header("Location: success.php");
         exit();
     } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        $responseMessage = "Error: " . $sql . "<br>" . $conn->error;
     }
 
-    $conn->close();
+    $conn->close(); // Close the database connection
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
