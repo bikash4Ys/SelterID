@@ -64,10 +64,9 @@
         <div class="container mx-auto flex justify-between items-center">
             <a href="index.html"><h1 class="text-xl font-bold text-purple-600">SHELTER ID</h1></a>
             <ul class="flex space-x-4">
-                <li><a href="index.html" class="text-purple-500 hover:text-purple-700">Home</a></li>
-                <li><a href="dashboard.html" class="text-purple-500 hover:text-purple-700">Dashboard</a></li>
-                <li><a href="#about" class="text-purple-500 hover:text-purple-700">About Us</a></li>
-                <li><a href="login.html" class="text-purple-500 hover:text-purple-700">Logout</a></li>
+                <li><a href="../index.php" class="text-purple-500 hover:text-purple-700">Home</a></li>
+                <li><a href="dashboard.php" class="text-purple-500 hover:text-purple-700">Dashboard</a></li>
+                <li><a href="login.php" class="text-purple-500 hover:text-purple-700">Logout</a></li>
             </ul>
         </div>
     </nav>

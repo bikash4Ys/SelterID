@@ -48,27 +48,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 5000); // 5 seconds
     }
 
-    // Function to stop the camera
-    function stopCamera(stream) {
-        video.srcObject.getTracks().forEach(track => track.stop()); // Stop the camera
-        video.style.display = 'none';
-        captureBtn.style.display = 'none';
-        canvas.style.display = 'none';
-    }
-
-    // Validate password match on registration form submission
-    if (document.getElementById('registrationForm')) {
-        document.getElementById('registrationForm').addEventListener('submit', function (event) {
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-
-            if (password !== confirmPassword) {
-                event.preventDefault();
-                document.getElementById('responseMessage').innerHTML = '<p class="text-red-500">Passwords do not match.</p>';
-            }
-        });
-    }
-
     // // Smooth scrolling for navigation links on the index page
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {

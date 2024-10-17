@@ -80,7 +80,7 @@ $conn->close();
     <!-- Navbar -->
     <nav class="bg-white shadow-md p-4 fixed w-full top-0 z-10">
         <div class="container mx-auto flex justify-between items-center">
-            <a href="index.php" class="text-xl font-bold text-purple-600">SHELTER ID</a>
+            <a href="../index.php" class="text-xl font-bold text-purple-600">SHELTER ID</a>
             <ul class="flex space-x-4">
                 <li><a href="../index.php" class="text-gray-500 hover:text-gray-700">Home</a></li>
                 <li><a href="dashboard.php" class="text-gray-500 hover:text-gray-700">Dashboard</a></li>

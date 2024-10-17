@@ -100,7 +100,7 @@ $conn->close();
                 <ul class="text-gray-700 space-y-4">
                     <li><a href="update.php" class="text-purple-500 hover:underline">Update Profile</a></li>
                     <li><a href="#" class="text-purple-500 hover:underline">Manage Evacuation Info</a></li>
-                    <li><a href="#" class="text-purple-500 hover:underline">View Shelter Data</a></li>
+                    <li><a href="hinan.php" class="text-purple-500 hover:underline">View Shelter Data</a></li>
                 </ul>
             </div>
         </div>

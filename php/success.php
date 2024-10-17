@@ -15,7 +15,7 @@
         <p class="mb-6">Thank you for registering with Shelter ID. You can now log in to your account.</p>
 
         <div class="flex justify-center space-x-4">
-            <a href="index.php" class="bg-purple-500 text-white px-4 py-2 rounded-md hover:bg-purple-700">Back to Home</a>
+            <a href="../index.php" class="bg-purple-500 text-white px-4 py-2 rounded-md hover:bg-purple-700">Back to Home</a>
             <a href="login.php" class="bg-purple-500 text-white px-4 py-2 rounded-md hover:bg-purple-700">Login Now</a>
         </div>
     </main>
