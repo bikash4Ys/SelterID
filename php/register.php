@@ -1,6 +1,9 @@
 <?php
 // register.php
 
+// Start session
+session_start();
+
 // Database connection
 $servername = "localhost";
 $username = "root";  // Update with your database username
@@ -65,6 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $conn->close(); // Close the database connection
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
