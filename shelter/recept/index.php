@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Evacuation Face Recognition - Home</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="../../js/main.js" defer></script> <!-- Ensure JS loads after DOM is ready -->
+    <script src="../../js/main.js" defer></script>
+    <script src="../../js/receipt.js" defer></script>
 </head>
 
 <body>
@@ -30,14 +31,24 @@
             <h2 class="text-4xl font-bold mb-4">Shelter Reception</h2>
             <p class="mb-8 text-lg text-gray-600 max-w-md mx-auto">Welcome to Shelter Reception. Use our face recognition system to streamline your check-in process efficiently and securely.</p>
 
+            <div class="my-4">
+                <h2>TODO:</h2>
+                <ul>
+                    <li>Webカメラ起動</li>
+                    <li>顔認識で、user_idを取得（ビカスプログラム）</li>
+                    <li>input hidden id=user-id に user_id を設定</li>
+                    <li>add.php を実行</li>
+                </ul>
+            </div>
+
             <!-- Button Group -->
             <div class="space-y-4 md:space-y-0 md:space-x-4 flex flex-col md:flex-row justify-center items-center">
-                <p class="text-lg text-gray-700 mb-4">Webカメラ軌道で受付</p>
 
-                <form action="add.php" method="post">
+                <form id="receipt-form" action="add.php" method="post">
                     <!-- Reception Button -->
-                    <input type="text" name="user_id" value="1">
-                    <button href="add.php" class="bg-purple-600 text-white py-4 px-8 rounded-lg text-xl font-semibold hover:bg-purple-700 transition duration-300 ease-in-out">
+                    <input type="hidden" id="user-id" name="user_id" value="1">
+
+                    <button onclick="rectipt()" class="bg-purple-600 text-white py-4 px-8 rounded-lg text-xl font-semibold hover:bg-purple-700 transition duration-300 ease-in-out">
                         受付
                     </button>
                 </form>

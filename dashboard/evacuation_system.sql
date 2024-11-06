@@ -32,9 +32,9 @@ ADD
     COLUMN IF NOT EXISTS faces JSON;
 
 CREATE TABLE `receptions` (
-    `id` int(11) NOT NULL,
-    `user_id` int(11) NOT NULL,
-    `recepted_at` datetime NOT NULL DEFAULT current_timestamp(),
-    `created_at` datetime NOT NULL DEFAULT current_timestamp(),
-    `updated_at` datetime NOT NULL DEFAULT current_timestamp()
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id int(11) NOT NULL,
+    recepted_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
