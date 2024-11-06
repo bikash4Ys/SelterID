@@ -6,7 +6,7 @@ const canvas = document.getElementById('canvas');
 const photoInput = document.getElementById('photo');
 const message = document.getElementById('message');
 const registArea = document.getElementById('regist-area');
-const maxImageCount = 20
+const maxImageCount = 5
 
 // キャプチャされた画像を保持するための DataTransfer オブジェクト
 const dataTransfer = new DataTransfer();
@@ -25,7 +25,7 @@ const onCapture = async (e) => {
     let count = 0;
 
     const captureImage = () => {
-        if (count <= maxImageCount) {
+        if (count < maxImageCount) {
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
             canvas.toBlob((blob) => {
                 const file = new File([blob], `captured-image-${Date.now()}-${count}.jpg`, { type: 'image/jpeg' });
@@ -38,7 +38,7 @@ const onCapture = async (e) => {
             });
 
             count++;
-            setTimeout(captureImage, 500); // 0.5秒間隔で次のキャプチャを実行
+            setTimeout(captureImage, 1000);
         }
     };
 

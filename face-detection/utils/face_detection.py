@@ -3,9 +3,19 @@ import numpy as np
 import os
 import uuid
 
-probability = 0.7
+probability = 0.6
 face_dir = "static/registered_faces"
-# face_dir = "../uploads"
+model_dir = "static/models"
+
+# モデルファイルのパスを指定
+face_detection_model = os.path.join(model_dir, "face_detection_yunet_2023mar.onnx")
+face_recognition_model = os.path.join(model_dir, "face_recognition_sface_2021dec.onnx")
+
+# YuNet モデルと FaceRecognizerSF モデルの設定
+detector = cv2.FaceDetectorYN.create(face_detection_model, "", (320, 320))
+detector.setInputSize((320, 320))  # 初期設定でサイズを指定
+
+recognizer = cv2.FaceRecognizerSF.create(face_recognition_model, "")
 
 def detect_faces(image_data):
     nparr = np.frombuffer(image_data, np.uint8)
@@ -14,21 +24,21 @@ def detect_faces(image_data):
         print("Failed to decode image")
         return None
 
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-    if face_cascade.empty():
-        print("Failed to load cascade classifier")
-        return None
+    # 入力画像をリサイズ
+    img_resized = cv2.resize(img, (320, 320))
 
-    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
-    if len(faces) == 0:
+    # 顔検出
+    faces = detector.detect(img_resized)
+    if faces[1] is None:
         print("No faces detected")
         return None
 
-    for (x, y, w, h) in faces:
-        cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
+    # 検出された顔に枠を描画
+    for face in faces[1]:
+        box = face[:4].astype(int)
+        cv2.rectangle(img_resized, (box[0], box[1]), (box[0] + box[2], box[1] + box[3]), (255, 0, 0), 2)
 
-    return img
+    return img_resized
 
 def register_face(user_id, image_data):
     nparr = np.frombuffer(image_data, np.uint8)
@@ -37,30 +47,30 @@ def register_face(user_id, image_data):
         print("Failed to decode image")
         return False
 
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-    if face_cascade.empty():
-        print("Failed to load cascade classifier")
-        return False
+    # 入力画像をリサイズ
+    img_resized = cv2.resize(img, (320, 320))
 
-    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
-    if len(faces) == 0:
+    # 顔検出
+    faces = detector.detect(img_resized)
+    if faces[1] is None:
         print("No faces detected")
         return False
 
-    x, y, w, h = faces[0]
-    face_img = gray[y:y + h, x:x + w]
+    # 最初に検出された顔領域を取得し、特徴量を計算
+    face = faces[1][0]
+    aligned_face = recognizer.alignCrop(img_resized, face)
+    features = recognizer.feature(aligned_face)
 
+    # ユーザーディレクトリ作成と特徴量保存
     user_dir = os.path.join(face_dir, user_id)
-    if not os.path.exists(user_dir):
-        os.makedirs(user_dir)
+    os.makedirs(user_dir, exist_ok=True)
 
-    # UUIDを使ってファイルパスを作成
+    # UUIDを使って特徴量を保存する `.npy` ファイルを生成
     unique_id = str(uuid.uuid4())
-    face_path = os.path.join(user_dir, f'{unique_id}.jpg')
+    feature_path = os.path.join(user_dir, f'{unique_id}.npy')
+    np.save(feature_path, features)
 
-    cv2.imwrite(face_path, face_img)
-    print(f"Saved face image for user ID: {user_id} at {face_path}")
+    print(f"Saved features for user ID: {user_id} at {feature_path}")
     return True
 
 def recognize_face(image_data):
@@ -70,36 +80,42 @@ def recognize_face(image_data):
         print("Failed to decode image")
         return None
 
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-    if face_cascade.empty():
-        print("Failed to load cascade classifier")
-        return None
+    # 入力画像をリサイズ
+    img_resized = cv2.resize(img, (320, 320))
 
-    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
-    if len(faces) == 0:
+    # 顔検出
+    faces = detector.detect(img_resized)
+    if faces[1] is None:
         print("No faces detected")
         return None
 
-    x, y, w, h = faces[0]
-    face_img = gray[y:y + h, x:x + w]
+    # 最初に検出された顔領域を取得し、特徴量を計算
+    face = faces[1][0]
+    aligned_face = recognizer.alignCrop(img_resized, face)
+    input_features = recognizer.feature(aligned_face)
 
+    # 登録された顔特徴量と比較
     for user_id in os.listdir(face_dir):
         user_dir = os.path.join(face_dir, user_id)
         if os.path.isdir(user_dir):
             for filename in os.listdir(user_dir):
-                registered_face = cv2.imread(os.path.join(user_dir, filename), cv2.IMREAD_GRAYSCALE)
-                if registered_face is None:
-                    print(f"Failed to load registered face: {filename}")
-                    continue
+                feature_path = os.path.join(user_dir, filename)
+                
+                # .npyファイルのみを読み込み
+                if feature_path.endswith(".npy"):
+                    try:
+                        registered_features = np.load(feature_path)
+                    except Exception as e:
+                        print(f"Error loading features from {feature_path}: {e}")
+                        continue
 
-                res = cv2.matchTemplate(face_img, registered_face, cv2.TM_CCOEFF_NORMED)
-                _, max_val, _, _ = cv2.minMaxLoc(res)
-                print(max_val)
-                if max_val > probability:
-                    recognized_user = user_id
-                    print(f"Recognized user ID: {recognized_user}")
-                    return recognized_user
+                    # 類似度スコアの計算
+                    score = recognizer.match(input_features, registered_features, cv2.FaceRecognizerSF_FR_COSINE)
+                    print(f"Matching score for user {user_id}: {score}")
+                    
+                    if score > probability:
+                        print(f"Recognized user ID: {user_id}")
+                        return user_id
 
     print("No user recognized")
     return None
