@@ -1,0 +1,3 @@
+static/registered_faces/*
+**/__pycache__/*
+.venv/*

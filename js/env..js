@@ -1,1 +1,0 @@
-const API_URL = 'http://localhost/SelterID/register.php';

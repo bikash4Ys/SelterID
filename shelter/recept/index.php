@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Evacuation Face Recognition - Home</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="../../js/main.js" defer></script>
+    <script src="../../js/env.js" defer></script>
     <script src="../../js/receipt.js" defer></script>
 </head>
 
@@ -31,15 +31,15 @@
             <h2 class="text-4xl font-bold mb-4">Shelter Reception</h2>
             <p class="mb-8 text-lg text-gray-600 max-w-md mx-auto">Welcome to Shelter Reception. Use our face recognition system to streamline your check-in process efficiently and securely.</p>
 
-            <div class="my-4">
-                <h2>TODO:</h2>
-                <ul>
-                    <li>Webカメラ起動</li>
-                    <li>顔認識で、user_idを取得（ビカスプログラム）</li>
-                    <li>input hidden id=user-id に user_id を設定</li>
-                    <li>add.php を実行</li>
-                </ul>
+            <div class="my-4 md:space-y-0 md:space-x-4 flex flex-col md:flex-row justify-center items-center">
+                <!-- カメラ映像を表示するビデオタグ -->
+                <video id="video" width="320" height="240" autoplay class="mt-4"></video>
+
+                <!-- キャプチャした画像を保持するキャンバス -->
+                <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
             </div>
+
+            <div id="responseMessage" class="text-red-500 p-3"></div>
 
             <!-- Button Group -->
             <div class="space-y-4 md:space-y-0 md:space-x-4 flex flex-col md:flex-row justify-center items-center">
@@ -47,11 +47,11 @@
                 <form id="receipt-form" action="add.php" method="post">
                     <!-- Reception Button -->
                     <input type="hidden" id="user-id" name="user_id" value="1">
-
-                    <button onclick="rectipt()" class="bg-purple-600 text-white py-4 px-8 rounded-lg text-xl font-semibold hover:bg-purple-700 transition duration-300 ease-in-out">
-                        受付
-                    </button>
                 </form>
+
+                <button onclick="onRecept()" class="bg-purple-600 text-white py-4 px-8 rounded-lg text-xl font-semibold hover:bg-purple-700 transition duration-300 ease-in-out">
+                    受付
+                </button>
 
                 <!-- Back Button -->
                 <a href="./" class="bg-gray-300 text-gray-800 py-4 px-8 rounded-lg text-xl font-semibold hover:bg-gray-400 transition duration-300 ease-in-out">
