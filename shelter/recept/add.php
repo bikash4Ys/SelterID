@@ -31,7 +31,7 @@ try {
         header('Location: complete.php');
         exit;
     } else {
-        echo "User ID already exists in the receptions list.";
+        echo "User ID:" . $recept_data['user_id'] ." already exists in the receptions list.";
     }
 } catch (PDOException $e) {
     echo "Database error: " . $e->getMessage();

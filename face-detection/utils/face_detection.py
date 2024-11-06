@@ -3,7 +3,7 @@ import numpy as np
 import os
 import uuid
 
-probability = 0.6
+probability = 0.7
 face_dir = "static/registered_faces"
 # face_dir = "../uploads"
 
