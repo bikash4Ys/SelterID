@@ -30,11 +30,10 @@
 
         <div class="flex flex-col items-center space-y-6">
             <!-- User Photo -->
-            <img src="images/profile_placeholder.jpg" alt="Profile Image" class="h-32 w-32 object-cover rounded-full border border-gray-300 shadow-md">
+            <img src="images/profile_placeholder.jpg" alt="John Doe's Profile Image" class="h-32 w-32 object-cover rounded-full border border-gray-300 shadow-md">
 
             <!-- User Info (as a table) -->
             <div class="w-full max-w-md bg-gray-50 p-6 rounded-lg shadow-md">
-                <!-- Table-like structure using divs -->
                 <div class="grid grid-cols-2 gap-4 mb-4">
                     <div class="font-bold">User ID:</div>
                     <div>12345</div>
@@ -62,10 +61,10 @@
                 </div>
             </div>
 
-            <!-- Recept List Link -->
+            <!-- Back to List Button -->
             <div class="mt-6">
-                <a href="recept_list.php" class="bg-purple-600 text-white py-2 px-4 rounded-md shadow hover:bg-purple-700 transition duration-200">
-                    Back to Recept List
+                <a href="./recept_list.php" class="bg-purple-600 text-white py-2 px-4 rounded-md shadow hover:bg-purple-700 transition duration-200">
+                    Back to Reception List
                 </a>
             </div>
         </div>

@@ -1,3 +1,27 @@
+<?php
+// Database connection settings
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "evacuation_system";
+
+try {
+    $pdo = new PDO("mysql:host=$servername;dbname=$dbname;charset=utf8", $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    // Fetch all entries from the receptions table and join with users table to get the name
+    // Assuming the `users` table has an `id` column
+    $stmt = $pdo->query("SELECT receptions.user_id, users.name, receptions.recepted_at 
+                         FROM receptions 
+                         LEFT JOIN users ON receptions.user_id = users.id 
+                         ORDER BY recepted_at DESC");
+    $receptions = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    die("Database error: " . $e->getMessage());
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,8 +30,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Evacuation Face Recognition - Reception List</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
-    <script src="js/main.js" defer></script> <!-- Ensure JS loads after DOM is ready -->
 </head>
 
 <body>
@@ -31,35 +53,27 @@
             <h2 class="text-4xl font-bold mb-8">Reception List</h2>
 
             <!-- Reception List Table -->
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto px-4">
                 <table class="min-w-full table-auto bg-white shadow-lg rounded-lg">
                     <thead class="bg-purple-600 text-white">
                         <tr>
                             <th class="px-4 py-2">User ID</th>
                             <th class="px-4 py-2">Name</th>
-                            <th class="px-4 py-2">Photo</th>
                             <th class="px-4 py-2">Reception Date & Time</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class='border px-4 py-2'>1</td>
-                            <td class='border px-4 py-2'><a href="recept_detail.php">Alice</a></td>
-                            <td class='border px-4 py-2'><img src="" alt='Profile Image' class='h-16 w-16 object-cover rounded-full'></td>
-                            <td class='border px-4 py-2'>2024/10/12 15:31</td>
-                        </tr>
-                        <tr>
-                            <td class='border px-4 py-2'>2</td>
-                            <td class='border px-4 py-2'>Bob</td>
-                            <td class='border px-4 py-2'><img src="" alt='Profile Image' class='h-16 w-16 object-cover rounded-full'></td>
-                            <td class='border px-4 py-2'>2024/10/12 15:38</td>
-                        </tr>
-                        <tr>
-                            <td class='border px-4 py-2'>3</td>
-                            <td class='border px-4 py-2'>Chris</td>
-                            <td class='border px-4 py-2'><img src="" alt='Profile Image' class='h-16 w-16 object-cover rounded-full'></td>
-                            <td class='border px-4 py-2'>2024/10/12 16:31</td>
-                        </tr>
+                        <?php foreach ($receptions as $reception): ?>
+                            <tr>
+                                <td class="border px-4 py-2"><?= htmlspecialchars($reception['user_id']); ?></td>
+                                <td class="border px-4 py-2">
+                                    <a href="recept_detail.php?id=<?= htmlspecialchars($reception['user_id']); ?>" class="text-purple-500 hover:underline">
+                                        <?= htmlspecialchars($reception['name']); ?>
+                                    </a>
+                                </td>
+                                <td class="border px-4 py-2"><?= htmlspecialchars($reception['recepted_at']); ?></td>
+                            </tr>
+                        <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
