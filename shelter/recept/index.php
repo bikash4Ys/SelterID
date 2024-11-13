@@ -1,3 +1,12 @@
+<?php
+session_start();
+
+$error = "";
+if (isset($_SESSION['error'])) {
+    $error = $_SESSION['error'];
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -39,24 +48,37 @@
                 <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
             </div>
 
-            <div id="responseMessage" class="text-red-500 p-3"></div>
+            <!-- Response message -->
+            <div id="responseMessage" class="text-red-500 p-3">
+                <?= $error ?>
+            </div>
 
             <!-- Button Group -->
-            <div class="space-y-4 md:space-y-0 md:space-x-4 flex flex-col md:flex-row justify-center items-center">
+            <div class="my-4 flex flex-col md:flex-row justify-center items-center">
 
                 <form id="receipt-form" action="add.php" method="post">
                     <!-- Reception Button -->
                     <input type="hidden" id="user-id" name="user_id" value="1">
                 </form>
 
-                <button onclick="onRecept()" class="bg-purple-600 text-white py-4 px-8 rounded-lg text-xl font-semibold hover:bg-purple-700 transition duration-300 ease-in-out">
+                <!-- Recept -->
+                <button onclick="onRecept()" class="w-64 bg-teal-600 text-white py-4 px-8 rounded-lg text-xl font-semibold hover:bg-teal-700 transition duration-300 ease-in-out">
                     受付
                 </button>
 
+
+            </div>
+
+
+            <div class="my-6">
+                <a href="../../php/register.php" class="bg-purple-600 text-white py-4 px-8 rounded-lg text-xl font-semibold hover:bg-purple-700 transition duration-300 ease-in-out">
+                    避難者受付（事前登録済みでない方）
+                </a>
                 <!-- Back Button -->
-                <a href="./" class="bg-gray-300 text-gray-800 py-4 px-8 rounded-lg text-xl font-semibold hover:bg-gray-400 transition duration-300 ease-in-out">
+                <a href="../" class="bg-gray-300 text-gray-800 py-4 px-8 rounded-lg text-xl font-semibold hover:bg-gray-400 transition duration-300 ease-in-out">
                     Back
                 </a>
+
             </div>
         </div>
     </header>

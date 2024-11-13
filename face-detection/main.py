@@ -1,7 +1,7 @@
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from utils.face_detection import detect_faces, register_face, recognize_face
+from utils.face_detection import detect_faces, register_face, recognize_face, delete_user_faces
 import cv2
 import base64
 import os
@@ -50,6 +50,10 @@ async def register(user_id: str = Form(...), images: List[UploadFile] = File(...
     print("User ID: ", user_id)
     print("Images: ", images)
 
+    # 画像削除 
+    delete_user_faces(user_id)
+
+    # 画像保存
     for image in images:
         # 各アップロードされた画像ファイルを読み込み
         img = await image.read()

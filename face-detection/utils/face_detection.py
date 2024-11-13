@@ -17,6 +17,20 @@ detector.setInputSize((320, 320))  # 初期設定でサイズを指定
 
 recognizer = cv2.FaceRecognizerSF.create(face_recognition_model, "")
 
+
+def delete_user_faces(user_id):
+    # `user_id`のディレクトリ内の`.npy`ファイルを削除
+    user_dir = os.path.join(face_dir, user_id)
+    if os.path.exists(user_dir):
+        for file in os.listdir(user_dir):
+            if file.endswith(".npy"):
+                file_path = os.path.join(user_dir, file)
+                try:
+                    os.remove(file_path)
+                    print(f"Deleted {file_path}")
+                except Exception as e:
+                    print(f"Failed to delete {file_path}: {e}")
+
 def detect_faces(image_data):
     nparr = np.frombuffer(image_data, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
