@@ -15,7 +15,7 @@
     <!-- Navbar -->
     <nav class="p-4 shadow-md fixed w-full top-0 z-10 bg-white" aria-label="Main Navigation">
         <div class="container mx-auto flex justify-between items-center">
-            <a href="index.php">
+            <a href="../">
                 <h1 class="text-xl font-bold text-purple-600">SHELTER ID</h1>
             </a>
             <ul class="flex space-x-4">

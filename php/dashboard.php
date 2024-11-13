@@ -47,7 +47,7 @@ $conn->close();
             <ul class="flex space-x-4">
                 <li><a href="index.php" class="text-gray-500 hover:text-gray-700">Home</a></li>
                 <li><a href="dashboard.php" class="text-purple-600 font-semibold">Dashboard</a></li>
-                <li><a href="login.php" class="text-gray-500 hover:text-gray-700">Logout</a></li>
+                <li><a href="logout.php" class="text-gray-500 hover:text-gray-700">Logout</a></li>
             </ul>
         </div>
     </nav>

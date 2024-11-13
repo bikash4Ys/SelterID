@@ -24,12 +24,12 @@ if (isset($_SESSION['error'])) {
     <!-- Navbar -->
     <nav class="p-4 shadow-md fixed w-full top-0 z-10 bg-white" aria-label="Main Navigation">
         <div class="container mx-auto flex justify-between items-center">
-            <a href="index.php">
+            <a href="../../">
                 <h1 class="text-xl font-bold text-purple-600">SHELTER ID</h1>
             </a>
             <ul class="flex space-x-4">
-                <li><a href="reception.php" class="text-purple-500 hover:text-purple-700">Reception</a></li>
-                <li><a href="register.php" class="text-purple-500 hover:text-purple-700">Register</a></li>
+                <li><a href="../" class="text-purple-500 hover:text-purple-700">Reception</a></li>
+                <li><a href="../../php/register.php" class="text-purple-500 hover:text-purple-700">Register</a></li>
             </ul>
         </div>
     </nav>
