@@ -1,26 +1,35 @@
 <?php
-// Database connection settings
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "evacuation_system";
+require_once "../db.php";
 
 try {
-    $pdo = new PDO("mysql:host=$servername;dbname=$dbname;charset=utf8", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    // ディスプレイモードを取得。デフォルトは「すべて」表示
+    $mode = isset($_GET['mode']) ? $_GET['mode'] : 'all';
 
-    // Fetch all entries from the receptions table and join with users table to get the name
-    // Assuming the `users` table has an `id` column
-    $stmt = $pdo->query("SELECT receptions.user_id, users.name, receptions.recepted_at 
-                         FROM receptions 
-                         LEFT JOIN users ON receptions.user_id = users.id 
-                         ORDER BY recepted_at DESC");
+    // モードに応じたデータ取得クエリ
+    if ($mode === 'received') {  // 受付済み
+        $stmt = $pdo->query("SELECT receptions.user_id, users.name, receptions.recepted_at, '受付済' AS status
+                             FROM receptions 
+                             LEFT JOIN users ON receptions.user_id = users.id 
+                             ORDER BY recepted_at DESC");
+    } elseif ($mode === 'not_received') {  // 未受付
+        $stmt = $pdo->query("SELECT users.id AS user_id, users.name, NULL AS recepted_at, '未受付' AS status
+                             FROM users 
+                             LEFT JOIN receptions ON users.id = receptions.user_id 
+                             WHERE receptions.user_id IS NULL 
+                             ORDER BY users.id ASC");
+    } else {  // すべて
+        $stmt = $pdo->query("SELECT users.id AS user_id, users.name, receptions.recepted_at, 
+                             CASE WHEN receptions.user_id IS NOT NULL THEN '受付済' ELSE '未受付' END AS status
+                             FROM users 
+                             LEFT JOIN receptions ON users.id = receptions.user_id 
+                             ORDER BY recepted_at DESC");
+    }
     $receptions = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 } catch (PDOException $e) {
     die("Database error: " . $e->getMessage());
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -41,8 +50,9 @@ try {
                 <h1 class="text-xl font-bold text-purple-600">SHELTER ID</h1>
             </a>
             <ul class="flex space-x-4">
-                <li><a href="reception.php" class="text-purple-500 hover:text-purple-700">Reception</a></li>
-                <li><a href="register.php" class="text-purple-500 hover:text-purple-700">Register</a></li>
+                <li><a href="?mode=all" class="text-purple-500 hover:text-purple-700">すべて</a></li>
+                <li><a href="?mode=received" class="text-purple-500 hover:text-purple-700">受付済み</a></li>
+                <li><a href="?mode=not_received" class="text-purple-500 hover:text-purple-700">未受付</a></li>
             </ul>
         </div>
     </nav>
@@ -59,21 +69,29 @@ try {
                         <tr>
                             <th class="px-4 py-2">User ID</th>
                             <th class="px-4 py-2">Name</th>
+                            <th class="px-4 py-2">Reception Status</th>
                             <th class="px-4 py-2">Reception Date & Time</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($receptions as $reception): ?>
+                        <?php if (!empty($receptions)): ?>
+                            <?php foreach ($receptions as $reception): ?>
+                                <tr>
+                                    <td class="border px-4 py-2"><?= htmlspecialchars($reception['user_id']); ?></td>
+                                    <td class="border px-4 py-2">
+                                        <a href="recept_detail.php?id=<?= htmlspecialchars($reception['user_id']); ?>" class="text-purple-500 hover:underline">
+                                            <?= htmlspecialchars($reception['name']); ?>
+                                        </a>
+                                    </td>
+                                    <td class="border px-4 py-2"><?= htmlspecialchars($reception['status']); ?></td>
+                                    <td class="border px-4 py-2"><?= htmlspecialchars($reception['recepted_at'] ?? ''); ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
                             <tr>
-                                <td class="border px-4 py-2"><?= htmlspecialchars($reception['user_id']); ?></td>
-                                <td class="border px-4 py-2">
-                                    <a href="recept_detail.php?id=<?= htmlspecialchars($reception['user_id']); ?>" class="text-purple-500 hover:underline">
-                                        <?= htmlspecialchars($reception['name']); ?>
-                                    </a>
-                                </td>
-                                <td class="border px-4 py-2"><?= htmlspecialchars($reception['recepted_at']); ?></td>
+                                <td colspan="4" class="text-center px-4 py-2 text-gray-500">No data found.</td>
                             </tr>
-                        <?php endforeach; ?>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>
