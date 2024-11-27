@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['user_id'] = $user_id;
 
         // Redirect to the face intro page (fintro.php)
-        header("Location: fintro.php");
+        header("Location: regist_face.php");
         exit();
     } else {
         $responseMessage = "Error: " . $sql . "<br>" . $conn->error;

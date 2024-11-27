@@ -22,6 +22,20 @@ $user_id = $_SESSION['user_id'];
     <div class="container mx-auto p-6">
         <h1 class="text-2xl font-bold text-center mb-6">Regist faces</h1>
 
+        <div class="container mx-auto mt-2 p-8 bg-white rounded-lg shadow-lg">
+            <p class="mb-4">Welcome! Before you proceed to the face capture, please read the following instructions:</p>
+            <ul class="list-disc pl-5 mb-4">
+                <li>Ensure you are in a well-lit area.</li>
+                <li>Position your face directly in front of the camera for optimal capture.</li>
+                <li>The system will capture a total of 5 images:</li>
+                <ul class="list-disc pl-5">
+                    <li>5 images facing straight ahead.</li>
+                </ul>
+                <li>Click the "Ready" button when you are prepared to start capturing.</li>
+            </ul>
+           
+        </div>
+
         <div id="message" class="mt-4 text-green-500"></div>
 
         <div id="video-area" class="flex flex-col items-center"> <!-- flex-colで縦並び、items-centerで中央寄せ -->
@@ -30,7 +44,7 @@ $user_id = $_SESSION['user_id'];
 
             <!-- ボタンを縦並びに配置 -->
             <div class="mt-4">
-                <button onclick="onCapture()" type="button" id="captureBtn" class="bg-purple-500 text-white px-3 py-2 rounded-md">Capture Image</button>
+                <button onclick="onCapture()" type="button" id="captureBtn" class="bg-purple-500 text-white px-3 py-2 rounded-md">Ready</button>
             </div>
         </div>
 
