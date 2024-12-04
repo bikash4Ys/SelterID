@@ -33,36 +33,44 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $address = $conn->real_escape_string($_POST['address']);
     $emergency_contact = $conn->real_escape_string($_POST['emergencyContact']);
 
-    // Handle file upload
-    if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] == UPLOAD_ERR_OK) {
-        $target_dir = "uploads/"; // Path to the uploads directory
-        $target_file = $target_dir . basename($_FILES["profile_image"]["name"]);
+    // Check if the email already exists in the database
+    $checkEmailQuery = "SELECT * FROM users WHERE email = '$email'";
+    $result = $conn->query($checkEmailQuery);
 
-        // Move the uploaded file to the target directory
-        if (move_uploaded_file($_FILES["profile_image"]["tmp_name"], $target_file)) {
-            // Success! Now save the path to the database
-            $profile_image = $conn->real_escape_string($target_file);
-        } else {
-            $responseMessage = "Error uploading the file.";
-        }
-    }
-
-    // Insert data into the database
-    $sql = "INSERT INTO users (name, email, password, gender, dob, address, emergency_contact, profile_image) 
-            VALUES ('$name', '$email', '$password', '$gender', '$dob', '$address', '$emergency_contact', '$profile_image')";
-
-    if ($conn->query($sql) === TRUE) {
-        // Fetch the last inserted ID to track the user
-        $user_id = $conn->insert_id;
-
-        // Store the user ID in the session
-        $_SESSION['user_id'] = $user_id;
-
-        // Redirect to the face intro page (fintro.php)
-        header("Location: regist_face.php");
-        exit();
+    if ($result->num_rows > 0) {
+        // If email already exists, show error message
+        $responseMessage = "Error: This email is already registered.";
     } else {
-        $responseMessage = "Error: " . $sql . "<br>" . $conn->error;
+        // Handle file upload
+        if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] == UPLOAD_ERR_OK) {
+            $target_dir = "uploads/"; // Path to the uploads directory
+            $target_file = $target_dir . basename($_FILES["profile_image"]["name"]);
+
+            if (move_uploaded_file($_FILES["profile_image"]["tmp_name"], $target_file)) {
+                // Success! Now save the path to the database
+                $profile_image = $conn->real_escape_string($target_file);
+            } else {
+                $responseMessage = "Error uploading the file.";
+            }
+        }
+
+        // Insert data into the database
+        $sql = "INSERT INTO users (name, email, password, gender, dob, address, emergency_contact, profile_image) 
+                VALUES ('$name', '$email', '$password', '$gender', '$dob', '$address', '$emergency_contact', '$profile_image')";
+
+        if ($conn->query($sql) === TRUE) {
+            // Fetch the last inserted ID to track the user
+            $user_id = $conn->insert_id;
+
+            // Store the user ID in the session
+            $_SESSION['user_id'] = $user_id;
+
+            // Redirect to the face intro page (fintro.php)
+            header("Location: regist_face.php");
+            exit();
+        } else {
+            $responseMessage = "Error: " . $sql . "<br>" . $conn->error;
+        }
     }
 
     $conn->close(); // Close the database connection
@@ -90,9 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </a>
             <ul class="flex space-x-4">
                 <li><a href="../index.php" class="text-purple-500 hover:text-purple-700">Home</a></li>
-                <!-- <li><a href="dashboard.php" class="text-purple-500 hover:text-purple-700">Dashboard</a></li> -->
-                <li><a href="login.php" class="text-purple-500 hover:text-purple-700">login</a></li>
-                <!-- <li><a href="#about" class="text-purple-500 hover:text-purple-700">About Us</a></li> -->
+                <li><a href="login.php" class="text-purple-500 hover:text-purple-700">Login</a></li>
             </ul>
         </div>
     </nav>
@@ -107,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
         <?php endif; ?>
 
-        <form action="register.php" method="POST" class="space-y-4">
+        <form action="register.php" method="POST" enctype="multipart/form-data" class="space-y-4">
             <!-- Full Name -->
             <div>
                 <label for="name" class="block text-sm font-medium">Full Name:</label>
@@ -168,6 +174,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <label for="emergencyContact" class="block text-sm font-medium">Emergency Contact:</label>
                 <input type="text" id="emergencyContact" name="emergencyContact" placeholder="Enter emergency contact"
                     required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500">
+            </div>
+
+            <!-- Profile Image -->
+            <div>
+                <label for="profile_image" class="block text-sm font-medium">Profile Image (optional):</label>
+                <input type="file" id="profile_image" name="profile_image"
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500">
             </div>
 

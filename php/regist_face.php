@@ -54,10 +54,12 @@ $user_id = $_SESSION['user_id'];
 
         <input type="hidden" name="user_id" id="user-id" value="<?= $user_id ?>">
 
-        <div id="regist-area" class="flex flex-col items-center hidden">
-            <button onclick="regist()" type="button" id="captureBtn" class="bg-purple-500 text-white px-3 py-2 rounded-md mt-4">Regist Images</button>
-        </div>
-    </div>
+        <div class="mt-4 flex flex-col items-center space-y-4">
+    <button onclick="regist()" type="button" class="bg-purple-500 text-white px-3 py-2 rounded-md">Regist Images</button>
+    <button onclick="window.location.href='login.php'" type="button" class="bg-purple-500 text-white px-3 py-2 rounded-md">Home</button>
+</div>
+
+   
 
     <script src="../js/env.js" defer></script>
     <script src="../js/regist_face.js" defer></script>
