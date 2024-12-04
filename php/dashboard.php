@@ -95,8 +95,8 @@ $conn->close();
             <div class="bg-white p-6 rounded-lg shadow-lg">
                 <div class="flex items-center space-x-4 mb-6">
                     <label for="profilePic" class="cursor-pointer">
-                        <img id="profileImage" src="<?php echo isset($user['profile_image']) ? $user['profile_image'] : 'https://via.placeholder.com/80'; ?>" alt="Profile Picture" class="rounded-full w-20 h-20 border-2 border-purple-500">
-                        <input type="file" id="profilePic" name="profile_image" accept="image/*" onchange="this.form.submit()" style="display: none;">
+                    <img id="profileImage" src="<?php echo isset($user['profile_image']) ? $user['profile_image'] : 'https://via.placeholder.com/80'; ?>" alt="Profile Picture" class="rounded-full w-20 h-20 border-2 border-purple-500">
+                    <input type="file" id="profilePic" name="profile_image" accept="image/*" onchange="this.form.submit()" style="display: none;">
                     </label>
                     <div>
                         <h2 class="text-xl font-semibold text-gray-700"><?php echo $user['name']; ?></h2>
