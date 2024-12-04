@@ -1,6 +1,4 @@
 <?php
-// dashboard.php
-
 session_start();
 
 // Redirect to login page if user is not logged in
@@ -26,6 +24,43 @@ $sql = "SELECT * FROM users WHERE id = $user_id";
 $result = $conn->query($sql);
 $user = $result->fetch_assoc(); // Fetch the logged-in user info
 
+// Handle profile picture upload
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['profile_image'])) {
+    $file_name = $_FILES['profile_image']['name'];
+    $file_tmp = $_FILES['profile_image']['tmp_name'];
+    $file_size = $_FILES['profile_image']['size'];
+    $file_error = $_FILES['profile_image']['error'];
+
+    if ($file_error === UPLOAD_ERR_OK) {
+        // Define the target directory
+        $target_dir = "uploads/";
+        // Create the uploads directory if it doesn't exist
+        if (!is_dir($target_dir)) {
+            mkdir($target_dir, 0777, true);
+        }
+
+        // Define the unique filename to avoid overwriting
+        $target_file = $target_dir . uniqid() . ".jpg"; 
+
+        // Move the uploaded file to the target directory
+        if (move_uploaded_file($file_tmp, $target_file)) {
+            // Update the user's profile image in the database
+            $sql = "UPDATE users SET profile_image = '$target_file' WHERE id = $user_id";
+            if ($conn->query($sql) === TRUE) {
+                // Update the session variable to reflect the change
+                $_SESSION['profile_image'] = $target_file;
+                echo "File uploaded successfully.";
+            } else {
+                echo "Error updating profile image in database.";
+            }
+        } else {
+            echo "Error uploading file.";
+        }
+    } else {
+        echo "Error uploading file.";
+    }
+}
+
 $conn->close();
 ?>
 
@@ -36,7 +71,7 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/dashboard.css"> <!-- Link to external CSS -->
+    <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body class="bg-gray-100">
 
@@ -60,8 +95,8 @@ $conn->close();
             <div class="bg-white p-6 rounded-lg shadow-lg">
                 <div class="flex items-center space-x-4 mb-6">
                     <label for="profilePic" class="cursor-pointer">
-                    <img id="profileImage" src="<?php echo $user['profile_image'] ? $user['profile_image'] : 'https://via.placeholder.com/80'; ?>" alt="Profile Picture" class="rounded-full w-20 h-20 border-2 border-purple-500">
-                        <input type="file" id="profilePic" accept="image/*" onchange="previewImage(event)" style="display: none;">
+                        <img id="profileImage" src="<?php echo isset($user['profile_image']) ? $user['profile_image'] : 'https://via.placeholder.com/80'; ?>" alt="Profile Picture" class="rounded-full w-20 h-20 border-2 border-purple-500">
+                        <input type="file" id="profilePic" name="profile_image" accept="image/*" onchange="this.form.submit()" style="display: none;">
                     </label>
                     <div>
                         <h2 class="text-xl font-semibold text-gray-700"><?php echo $user['name']; ?></h2>
@@ -74,7 +109,6 @@ $conn->close();
                     <p><strong>Phone:</strong> <?php echo $user['emergency_contact']; ?></p>
                     <p><strong>Address:</strong> <?php echo $user['address']; ?></p>
                 </div>
-                <button class="mt-4 w-full bg-purple-500 text-white py-2 rounded-md">Edit Profile</button>
             </div>
 
             <!-- User Activity Overview -->
@@ -114,6 +148,7 @@ $conn->close();
         </div>
     </footer>
 
-    <script src="../js/dashboard.js"></script> <!-- Include external JavaScript -->
+    <!-- Include external JavaScript -->
+    <script src="../js/dashboard.js"></script>
 </body>
 </html>
