@@ -40,24 +40,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['profile_image'])) {
         }
 
         // Define the unique filename to avoid overwriting
-        $target_file = $target_dir . uniqid() . ".jpg"; 
+        $target_file = $target_dir . uniqid() . "_" . basename($file_name);
 
-        // Move the uploaded file to the target directory
-        if (move_uploaded_file($file_tmp, $target_file)) {
-            // Update the user's profile image in the database
-            $sql = "UPDATE users SET profile_image = '$target_file' WHERE id = $user_id";
-            if ($conn->query($sql) === TRUE) {
-                // Update the session variable to reflect the change
-                $_SESSION['profile_image'] = $target_file;
-                echo "File uploaded successfully.";
+        // Validate the file type
+        $file_type = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+        $allowed_types = ['jpg', 'jpeg', 'png', 'gif'];
+        if (in_array($file_type, $allowed_types)) {
+            // Move the uploaded file to the target directory
+            if (move_uploaded_file($file_tmp, $target_file)) {
+                // Update the user's profile image in the database
+                $sql = "UPDATE users SET profile_image = '$target_file' WHERE id = $user_id";
+                if ($conn->query($sql) === TRUE) {
+                    $_SESSION['profile_image'] = $target_file; // Update session variable
+                    $user['profile_image'] = $target_file; // Update user info
+                } else {
+                    echo "Error updating profile image in database: " . $conn->error;
+                }
             } else {
-                echo "Error updating profile image in database.";
+                echo "Error moving the uploaded file.";
             }
         } else {
-            echo "Error uploading file.";
+            echo "Invalid file type. Only JPG, JPEG, PNG, and GIF files are allowed.";
         }
     } else {
-        echo "Error uploading file.";
+        echo "File upload error: " . $file_error;
     }
 }
 
@@ -66,6 +72,7 @@ $conn->close();
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -73,6 +80,7 @@ $conn->close();
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/dashboard.css">
 </head>
+
 <body class="bg-gray-100">
 
     <!-- Navbar -->
@@ -90,24 +98,30 @@ $conn->close();
     <!-- Main Content -->
     <div class="container mx-auto mt-24 p-8">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            
+
             <!-- Profile Card -->
             <div class="bg-white p-6 rounded-lg shadow-lg">
-                <div class="flex items-center space-x-4 mb-6">
-                    <label for="profilePic" class="cursor-pointer">
-                    <img id="profileImage" src="<?php echo isset($user['profile_image']) ? $user['profile_image'] : 'https://via.placeholder.com/80'; ?>" alt="Profile Picture" class="rounded-full w-20 h-20 border-2 border-purple-500">
-                    <input type="file" id="profilePic" name="profile_image" accept="image/*" onchange="this.form.submit()" style="display: none;">
-                    </label>
-                    <div>
-                        <h2 class="text-xl font-semibold text-gray-700"><?php echo $user['name']; ?></h2>
-                        <p class="text-gray-500"><?php echo $user['email']; ?></p>
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="flex items-center space-x-4 mb-6">
+                        <label for="profilePic" class="cursor-pointer">
+                            <img id="profileImage"
+                                src="<?php echo isset($user['profile_image']) ? $user['profile_image'] . '?' . time() : 'https://via.placeholder.com/80'; ?>"
+                                alt="Profile Picture" class="rounded-full w-20 h-20 border-2 border-purple-500">
+                            <input type="file" id="profilePic" name="profile_image" accept="image/*"
+                                onchange="this.form.submit()" style="display: none;">
+                        </label>
+                        <div>
+                            <h2 class="text-xl font-semibold text-gray-700">
+                                <?php echo htmlspecialchars($user['name']); ?></h2>
+                            <p class="text-gray-500"><?php echo htmlspecialchars($user['email']); ?></p>
+                        </div>
                     </div>
-                </div>
+                </form>
                 <div class="text-gray-700">
-                    <p><strong>Gender:</strong> <?php echo ucfirst($user['gender']); ?></p>
-                    <p><strong>DOB:</strong> <?php echo $user['dob']; ?></p>
-                    <p><strong>Phone:</strong> <?php echo $user['emergency_contact']; ?></p>
-                    <p><strong>Address:</strong> <?php echo $user['address']; ?></p>
+                    <p><strong>Gender:</strong> <?php echo ucfirst(htmlspecialchars($user['gender'])); ?></p>
+                    <p><strong>DOB:</strong> <?php echo htmlspecialchars($user['dob']); ?></p>
+                    <p><strong>Phone:</strong> <?php echo htmlspecialchars($user['emergency_contact']); ?></p>
+                    <p><strong>Address:</strong> <?php echo htmlspecialchars($user['address']); ?></p>
                 </div>
             </div>
 
@@ -127,18 +141,20 @@ $conn->close();
                     </div>
                 </div>
             </div>
-
-            <!-- Account Management -->
-            <div class="col-span-2 bg-white p-6 rounded-lg shadow-lg">
-                <h2 class="text-xl font-semibold text-gray-700 mb-4">Account Management</h2>
-                <ul class="text-gray-700 space-y-4">
-                    <li><a href="update.php" class="text-purple-500 hover:underline">Update Profile</a></li>
-                    <li><a href="#" class="text-purple-500 hover:underline">Manage Evacuation Info</a></li>
-                    <li><a href="hinan.php" class="text-purple-500 hover:underline">View Shelter Data</a></li>
-                    <li><a href="regist_face.php" class="text-purple-500 hover:underline">Regist Faces</a></li>
-                </ul>
-            </div>
         </div>
+    </div>
+
+    <!-- Account Management -->
+    <div class="col-span-2 bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-xl font-semibold text-gray-700 mb-4">Account Management</h2>
+        <ul class="text-gray-700 space-y-4">
+            <li><a href="update.php" class="text-purple-500 hover:underline">Update Profile</a></li>
+            <li><a href="#" class="text-purple-500 hover:underline">Manage Evacuation Info</a></li>
+            <li><a href="hinan.php" class="text-purple-500 hover:underline">View Shelter Data</a></li>
+            <li><a href="regist_face.php" class="text-purple-500 hover:underline">Regist Faces</a></li>
+        </ul>
+    </div>
+    </div>
     </div>
 
     <!-- Footer -->
@@ -151,4 +167,5 @@ $conn->close();
     <!-- Include external JavaScript -->
     <script src="../js/dashboard.js"></script>
 </body>
+
 </html>
