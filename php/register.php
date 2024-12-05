@@ -43,33 +43,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         // Handle file upload
         if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] == UPLOAD_ERR_OK) {
-            $target_dir = "uploads/"; // Path to the uploads directory
-            $target_file = $target_dir . basename($_FILES["profile_image"]["name"]);
+            $allowedTypes = ['image/png', 'image/jpeg'];
+            $fileType = mime_content_type($_FILES['profile_image']['tmp_name']);
 
-            if (move_uploaded_file($_FILES["profile_image"]["tmp_name"], $target_file)) {
-                // Success! Now save the path to the database
-                $profile_image = $conn->real_escape_string($target_file);
+            if (in_array($fileType, $allowedTypes)) {
+                $target_dir = "uploads/";
+                $target_file = $target_dir . basename($_FILES["profile_image"]["name"]);
+
+                if (move_uploaded_file($_FILES["profile_image"]["tmp_name"], $target_file)) {
+                    $profile_image = $conn->real_escape_string($target_file);
+                } else {
+                    $responseMessage = "Error uploading the file.";
+                }
             } else {
-                $responseMessage = "Error uploading the file.";
+                $responseMessage = "Error: Only PNG and JPG image files are allowed.";
             }
         }
 
         // Insert data into the database
-        $sql = "INSERT INTO users (name, email, password, gender, dob, address, emergency_contact, profile_image) 
-                VALUES ('$name', '$email', '$password', '$gender', '$dob', '$address', '$emergency_contact', '$profile_image')";
+        if (empty($responseMessage)) {
+            $sql = "INSERT INTO users (name, email, password, gender, dob, address, emergency_contact, profile_image) 
+                    VALUES ('$name', '$email', '$password', '$gender', '$dob', '$address', '$emergency_contact', '$profile_image')";
 
-        if ($conn->query($sql) === TRUE) {
-            // Fetch the last inserted ID to track the user
-            $user_id = $conn->insert_id;
-
-            // Store the user ID in the session
-            $_SESSION['user_id'] = $user_id;
-
-            // Redirect to the face intro page (fintro.php)
-            header("Location: regist_face.php");
-            exit();
-        } else {
-            $responseMessage = "Error: " . $sql . "<br>" . $conn->error;
+            if ($conn->query($sql) === TRUE) {
+                $user_id = $conn->insert_id; // Fetch the last inserted ID
+                $_SESSION['user_id'] = $user_id; // Store the user ID in the session
+                header("Location: regist_face.php"); // Redirect to the face intro page
+                exit();
+            } else {
+                $responseMessage = "Error: " . $sql . "<br>" . $conn->error;
+            }
         }
     }
 
@@ -180,9 +183,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <!-- Profile Image -->
             <div>
                 <label for="profile_image" class="block text-sm font-medium">Profile Image (optional):</label>
-                <input type="file" id="profile_image" name="profile_image"
+                <input type="file" id="profile_image" name="profile_image" accept=".jpg, .jpeg, .png"
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500">
             </div>
+
 
             <!-- Register Button -->
             <button type="submit" class="w-full bg-purple-500 text-white py-2 rounded-md">Register</button>
