@@ -32,7 +32,7 @@ const onCamera = async (e) => {
 // 画像キャプチャ処理
 const onCapture = async (e) => {
     let count = 0;
-    const scale = 0.5; // 縮小する比率（50%）
+    const scale = 1; // 縮小する比率（50%）
 
     const captureImage = () => {
         if (count < maxImageCount) {
@@ -44,7 +44,7 @@ const onCapture = async (e) => {
 
             const context = newCanvas.getContext('2d');
             context.scale(scale, scale); // コンテキストのスケールを設定
-            context.drawImage(video, 0, 0, 320, 240); // 元の画像サイズで描画
+            context.drawImage(video, 0, 0, 640, 480); // 元の画像サイズで描画
 
             newCanvas.toBlob((blob) => {
                 const file = new File([blob], `captured-image-${Date.now()}-${count}.jpg`, { type: 'image/jpeg' });

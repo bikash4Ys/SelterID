@@ -40,7 +40,7 @@ $user_id = $_SESSION['user_id'];
 
         <div id="video-area" class="flex flex-col items-center"> <!-- flex-colで縦並び、items-centerで中央寄せ -->
             <input type="file" id="photo" class="hidden">
-            <video id="video" width="320" height="240" autoplay style="display:none;" class="mt-4"></video>
+            <video id="video" width="640" height="480" autoplay style="display:none;" class="mt-4"></video>
 
             <!-- ボタンを縦並びに配置 -->
             <div class="mt-4">

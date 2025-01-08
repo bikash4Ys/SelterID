@@ -3,7 +3,7 @@ import numpy as np
 import os
 import uuid
 
-probability = 0.8
+probability = 0.65
 face_dir = "static/registered_faces"
 model_dir = "static/models"
 
@@ -108,12 +108,17 @@ def recognize_face(image_data):
     input_features = recognizer.feature(aligned_face)
 
     # 登録された顔特徴量と比較
+    recognized_user = None
+    highest_avg_score = 0  # 最大の平均スコアを追跡
+
     for user_id in os.listdir(face_dir):
         user_dir = os.path.join(face_dir, user_id)
         if os.path.isdir(user_dir):
+            scores = []  # 各ユーザーのスコアリスト
+
             for filename in os.listdir(user_dir):
                 feature_path = os.path.join(user_dir, filename)
-                
+
                 # .npyファイルのみを読み込み
                 if feature_path.endswith(".npy"):
                     try:
@@ -124,11 +129,21 @@ def recognize_face(image_data):
 
                     # 類似度スコアの計算
                     score = recognizer.match(input_features, registered_features, cv2.FaceRecognizerSF_FR_COSINE)
-                    print(f"Matching score for user {user_id}: {score}")
-                    
-                    if score > probability:
-                        print(f"Recognized user ID: {user_id}")
-                        return user_id
+                    scores.append(score)
+
+            # スコアの平均を計算
+            if scores:
+                avg_score = sum(scores) / len(scores)
+                print(f"Average score for user {user_id}: {avg_score}")
+
+                # 平均スコアがしきい値を超え、かつこれまでの最高スコアを超える場合に更新
+                if avg_score > probability and avg_score > highest_avg_score:
+                    recognized_user = user_id
+                    highest_avg_score = avg_score
+
+    if recognized_user:
+        print(f"Recognized user ID: {recognized_user} with average score: {highest_avg_score}")
+        return recognized_user
 
     print("No user recognized")
     return None
@@ -144,6 +159,7 @@ def recognize_faces(image_data):
     img_resized = cv2.resize(img, (320, 320))
 
     # 顔検出
+    detector.setScoreThreshold(0.5)
     faces = detector.detect(img_resized)
     if faces[1] is None:
         print("No faces detected")
