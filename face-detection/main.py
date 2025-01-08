@@ -1,7 +1,7 @@
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from utils.face_detection import detect_faces, register_face, recognize_face, delete_user_faces
+from utils.face_detection import detect_faces, register_face, recognize_face, recognize_faces, delete_user_faces
 import cv2
 import base64
 import os
@@ -79,6 +79,22 @@ async def recognize(image: UploadFile = File(...)):
 
     if recognized_user:
         return {"status": "success", "user_id": recognized_user}
+    else:
+        return {"status": "failure"}
+
+# 複数の顔を認識して登録ユーザーを返すAPI
+@app.post("/recognizes")
+async def recognizes(image: UploadFile = File(...)):
+    # アップロードされた画像ファイルを読み込み
+    img = await image.read()
+
+    print("Received image for recognition")
+
+    # 顔認識を実行
+    userIds = recognize_faces(img)
+
+    if userIds:
+        return {"status": "success", "user_ids": userIds}
     else:
         return {"status": "failure"}
 

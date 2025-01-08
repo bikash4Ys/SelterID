@@ -103,6 +103,7 @@ const registFaces = async (userId) => {
         });
         if (response.ok) {
             const result = await response.json();
+            location.href = "dashboard.php";
             console.log(result);
             message.textContent = 'Registration successful!';
             message.style.color = 'green';

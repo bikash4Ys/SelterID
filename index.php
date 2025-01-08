@@ -18,6 +18,7 @@
                 <li><a href="#home" class="text-purple-500 hover:text-purple-700">Home</a></li>
                 <li><a href="php/login.php" class="text-purple-500 hover:text-purple-700">Login</a></li>
                 <li><a href="php/register.php" class="text-purple-500 hover:text-purple-700">Register</a></li>
+                <li><a href="shelter/" class="text-purple-500 hover:text-purple-700">Reception</a></li>
             </ul>
         </div>
     </nav>

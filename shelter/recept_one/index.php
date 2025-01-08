@@ -14,16 +14,13 @@ if (isset($_SESSION['error'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShelterID -避難所受付-</title>
+    <title>Evacuation Face Recognition - Home</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="../../js/env.js" defer></script>
     <script src="../../js/receipt.js" defer></script>
 </head>
 
 <body>
-    <div id="loading" class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-        <div class="w-16 h-16 border-4 border-teal-600 border-t-transparent rounded-full animate-spin"></div>
-    </div>
 
     <!-- Navbar -->
     <nav class="p-4 shadow-md fixed w-full top-0 z-10 bg-white" aria-label="Main Navigation">
@@ -39,61 +36,51 @@ if (isset($_SESSION['error'])) {
     </nav>
 
     <!-- Hero Section -->
-    <main id="home" class="py-10 mt-6">
+    <header id="home" class="text-center py-20 mt-16 fade-in">
         <div class="container mx-auto">
-            <h2 class="text-center text-4xl font-bold mt-4">避難者受付</h2>
-
-            <div class="my-2 md:space-y-0 md:space-x-4 flex flex-col md:flex-row justify-center items-center">
+            <h2 class="text-4xl font-bold mb-4">Shelter Reception</h2>
+            <div class="my-4 md:space-y-0 md:space-x-4 flex flex-col md:flex-row justify-center items-center">
                 <!-- カメラ映像を表示するビデオタグ -->
-                <video id="video" width="480" height="360" autoplay class="mt-4"></video>
+                <video id="video" width="320" height="240" autoplay class="mt-4"></video>
 
                 <!-- キャプチャした画像を保持するキャンバス -->
                 <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
             </div>
 
-            <!-- Button Group -->
-            <div class="my-2 text-center">
-                <form id="receipt-form" action="add.php" method="post">
-                    <!-- Reception Button -->
-                    <input type="hidden" id="user-ids" name="user_ids" value="">
-                </form>
-
-                <!-- Recept -->
-                <button onclick="onRecepts()" class="w-64 bg-teal-600 text-white py-4 px-8 rounded-lg text-xl font-semibold hover:bg-teal-700 transition duration-300 ease-in-out">
-                    受付
-                </button>
-            </div>
-
             <!-- Response message -->
-            <div id="responseMessage" class="text-center text-red-500 p-3">
+            <div id="responseMessage" class="text-red-500 p-3">
                 <?= $error ?>
             </div>
 
-            <div class="my-2 py-2">
-                <table class="table-auto border-collapse border border-gray-300 w-full">
-                    <thead>
-                        <tr class="bg-gray-100">
-                            <th class="text-left border border-gray-300 px-4 py-2 w-[20%]">受付時間</th>
-                            <th class="text-left border border-gray-300 px-4 py-2 w-[30%]">氏名</th>
-                        </tr>
-                    </thead>
-                    <tbody id="receptionTableBody">
-                        <!-- Rows will be dynamically added here -->
-                    </tbody>
-                </table>
+            <!-- Button Group -->
+            <div class="my-4 flex flex-col md:flex-row justify-center items-center">
+
+                <form id="receipt-form" action="add.php" method="post">
+                    <!-- Reception Button -->
+                    <input type="hidden" id="user-id" name="user_id" value="1">
+                </form>
+
+                <!-- Recept -->
+                <button onclick="onRecept()" class="w-64 bg-teal-600 text-white py-4 px-8 rounded-lg text-xl font-semibold hover:bg-teal-700 transition duration-300 ease-in-out">
+                    受付
+                </button>
+
+
             </div>
 
-            <div class="py-6 my-4 text-center space-x-2">
+
+            <div class="my-6">
                 <a href="../../php/register.php" class="bg-purple-600 text-white py-4 px-8 rounded-lg text-xl font-semibold hover:bg-purple-700 transition duration-300 ease-in-out">
-                    事前登録済みでない方
+                    避難者受付（事前登録済みでない方）
                 </a>
                 <!-- Back Button -->
                 <a href="../" class="bg-gray-300 text-gray-800 py-4 px-8 rounded-lg text-xl font-semibold hover:bg-gray-400 transition duration-300 ease-in-out">
                     Back
                 </a>
+
             </div>
         </div>
-    </main>
+    </header>
 
     <!-- Footer -->
     <footer class="bg-gray-800 text-white py-6 fade-in">
