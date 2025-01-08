@@ -46,10 +46,10 @@ if (isset($_SESSION['error'])) {
 
             <div class="my-2 md:space-y-0 md:space-x-4 flex flex-col md:flex-row justify-center items-center">
                 <!-- カメラ映像を表示するビデオタグ -->
-                <video id="video" width="480" height="360" autoplay class="mt-4"></video>
+                <video id="video" width="960" height="720" autoplay class="mt-4"></video>
 
                 <!-- キャプチャした画像を保持するキャンバス -->
-                <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
+                <canvas id="canvas" width="540" height="480" style="display:none;"></canvas>
             </div>
 
             <!-- Button Group -->
