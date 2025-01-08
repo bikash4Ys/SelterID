@@ -43,45 +43,50 @@ if (isset($_SESSION['error'])) {
     <main id="home" class="py-10 mt-6">
         <div class="container mx-auto">
             <h2 class="text-center text-4xl font-bold mt-4">避難者受付</h2>
-
-            <div class="my-2 md:space-y-0 md:space-x-4 flex flex-col md:flex-row justify-center items-center">
-                <!-- カメラ映像を表示するビデオタグ -->
-                <video id="video" width="640" height="480" autoplay class="mt-4"></video>
-
-                <!-- キャプチャした画像を保持するキャンバス -->
-                <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
-            </div>
-
-            <!-- Button Group -->
-            <div class="my-2 text-center">
-                <form id="receipt-form" action="add.php" method="post">
-                    <!-- Reception Button -->
-                    <input type="hidden" id="user-ids" name="user_ids" value="">
-                </form>
-
-                <!-- Recept -->
-                <button onclick="onRecepts()" class="w-64 bg-teal-600 text-white py-4 px-8 rounded-lg text-xl font-semibold hover:bg-teal-700 transition duration-300 ease-in-out">
-                    受付
-                </button>
-            </div>
-
             <!-- Response message -->
             <div id="responseMessage" class="text-center text-red-500 p-3">
                 <?= $error ?>
             </div>
+            <!-- Video and Reception List Side by Side -->
+            <div class="my-2 flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+                <!-- Video Section -->
+                <div class="flex-grow md:w-2/3">
+                    <!-- カメラ映像を表示するビデオタグ -->
+                    <video id="video" width="640" height="480" autoplay class="mt-4 w-full"></video>
 
-            <div class="my-2 py-2">
-                <table class="table-auto border-collapse border border-gray-300 w-full">
-                    <thead>
-                        <tr class="bg-gray-100">
-                            <th class="text-left border border-gray-300 px-4 py-2 w-[20%]">受付時間</th>
-                            <th class="text-left border border-gray-300 px-4 py-2 w-[30%]">氏名</th>
-                        </tr>
-                    </thead>
-                    <tbody id="receptionTableBody">
-                        <!-- Rows will be dynamically added here -->
-                    </tbody>
-                </table>
+                    <!-- キャプチャした画像を保持するキャンバス -->
+                    <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
+
+                    <!-- Button Group -->
+                    <div class="my-2 text-center">
+                        <form id="receipt-form" action="add.php" method="post">
+                            <!-- Reception Button -->
+                            <input type="hidden" id="user-ids" name="user_ids" value="">
+                        </form>
+
+                        <!-- Recept -->
+                        <button onclick="onRecepts()" class="w-64 bg-teal-600 text-white py-4 px-8 rounded-lg text-xl font-semibold hover:bg-teal-700 transition duration-300 ease-in-out">
+                            受付
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Reception List Section -->
+                <div class="flex-grow md:w-1/3">
+                    <div class="my-2 py-2">
+                        <table class="table-auto border-collapse border border-gray-300 w-full">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="text-left border border-gray-300 px-4 py-2 w-[20%]">受付時間</th>
+                                    <th class="text-left border border-gray-300 px-4 py-2 w-[30%]">氏名</th>
+                                </tr>
+                            </thead>
+                            <tbody id="receptionTableBody">
+                                <!-- Rows will be dynamically added here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
 
             <div class="py-6 my-4 text-center space-x-2">
@@ -102,7 +107,6 @@ if (isset($_SESSION['error'])) {
             <p>&copy; 2024 Yokohama System Engineering College. All rights reserved.</p>
         </div>
     </footer>
-
 </body>
 
 </html>
