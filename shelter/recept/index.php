@@ -33,6 +33,7 @@ if (isset($_SESSION['error'])) {
             </a>
             <ul class="flex space-x-4">
                 <li><a href="../" class="text-purple-500 hover:text-purple-700">Reception</a></li>
+                <li><a href="../recept_list.php" class="text-purple-500 hover:text-purple-700">Reception List</a></li>
                 <li><a href="../../php/register.php" class="text-purple-500 hover:text-purple-700">Register</a></li>
             </ul>
         </div>

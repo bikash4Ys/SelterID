@@ -21,7 +21,7 @@
             <ul class="flex space-x-4">
                 <li><a href="./" class="text-purple-500 hover:text-purple-700">Reception</a></li>
                 <li><a href="../php/register.php" class="text-purple-500 hover:text-purple-700">Register</a></li>
-                <li><a href="recept_list.php" class="text-purple-500 hover:text-purple-700">Recept List</a></li>
+                <li><a href="recept_list.php" class="text-purple-500 hover:text-purple-700">Reception List</a></li>
                 <li><a href="#about" class="text-purple-500 hover:text-purple-700">About</a></li>
                 <li><a href="#how-it-works" class="text-purple-500 hover:text-purple-700">How it Works</a></li>
             </ul>
