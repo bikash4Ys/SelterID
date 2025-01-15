@@ -42,13 +42,9 @@ if (isset($_SESSION['error'])) {
     <!-- Hero Section -->
     <main id="home" class="py-10 mt-6">
         <div class="container mx-auto">
-            <h2 class="text-center text-4xl font-bold mt-4">避難者受付</h2>
-            <!-- Response message -->
-            <div id="responseMessage" class="text-center text-red-500 p-3">
-                <?= $error ?>
-            </div>
+            <h2 class="text-center text-4xl font-bold p-1">避難者受付</h2>
             <!-- Video and Reception List Side by Side -->
-            <div class="my-2 flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+            <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
                 <!-- Video Section -->
                 <div class="flex-grow md:w-2/3">
                     <!-- カメラ映像を表示するビデオタグ -->
@@ -64,16 +60,21 @@ if (isset($_SESSION['error'])) {
                             <input type="hidden" id="user-ids" name="user_ids" value="">
                         </form>
 
-                        <!-- Recept -->
-                        <button onclick="onRecepts()" class="w-64 bg-teal-600 text-white py-4 px-8 rounded-lg text-xl font-semibold hover:bg-teal-700 transition duration-300 ease-in-out">
-                            受付
-                        </button>
                     </div>
                 </div>
 
                 <!-- Reception List Section -->
                 <div class="flex-grow md:w-1/3">
                     <div class="my-2 py-2">
+
+                        <!-- Recept -->
+                        <button onclick="onRecepts()" class="w-64 bg-teal-600 text-white py-4 px-8 rounded-lg text-xl font-semibold hover:bg-teal-700 transition duration-300 ease-in-out">
+                            受付
+                        </button>
+                        <!-- Response message -->
+                        <div id="responseMessage" class="text-center text-red-500 p-1">
+                            <?= $error ?>
+                        </div>
                         <table class="table-auto border-collapse border border-gray-300 w-full">
                             <thead>
                                 <tr class="bg-gray-100">
