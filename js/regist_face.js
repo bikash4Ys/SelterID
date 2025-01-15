@@ -6,17 +6,9 @@ const photoInput = document.getElementById('photo');
 const message = document.getElementById('message');
 const registArea = document.getElementById('regist-area');
 const canvasArea = document.getElementById('canvas-area');
-const loadingModal = document.createElement('div'); // ローディングモーダルを作成
 const maxImageCount = 5;
 
-// モーダルのスタイルを設定
-loadingModal.classList.add('fixed', 'inset-0', 'flex', 'items-center', 'justify-center', 'bg-black', 'bg-opacity-50', 'z-50', 'hidden');
-loadingModal.innerHTML = `
-    <div class="bg-white p-6 rounded-lg shadow-lg">
-        <p class="text-lg font-semibold">Processing...</p>
-    </div>
-`;
-document.body.appendChild(loadingModal);
+const loadingModal = document.getElementById('loadingModal');
 
 // キャプチャされた画像を保持するための DataTransfer オブジェクト
 const dataTransfer = new DataTransfer();
@@ -31,15 +23,17 @@ const onCamera = async (e) => {
 
 // 画像キャプチャ処理
 const onCapture = async (e) => {
+    loadingModal.classList.remove('hidden'); // ローディングモーダルを表示
+
     let count = 0;
-    const scale = 1; // 縮小する比率（50%）
+    const scale = 0.5; // 縮小する比率（50%）
 
     const captureImage = () => {
         if (count < maxImageCount) {
             // 新しい canvas 要素を作成
             const newCanvas = document.createElement('canvas');
-            newCanvas.width = 320 * scale; // 縮小後の幅
-            newCanvas.height = 240 * scale; // 縮小後の高さ
+            newCanvas.width = 640 * scale; // 縮小後の幅
+            newCanvas.height = 480 * scale; // 縮小後の高さ
             canvasArea.appendChild(newCanvas);
 
             const context = newCanvas.getContext('2d');
@@ -59,7 +53,8 @@ const onCapture = async (e) => {
             count++;
             setTimeout(captureImage, 1000); // 次のキャプチャを一定間隔で実行
         } else {
-            registArea.classList.remove('hidden');
+            loadingModal.classList.add('hidden'); // ローディングモーダルを非表示
+            registArea.classList.remove('hidden'); // 登録エリアを表示
         }
     };
 

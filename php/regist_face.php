@@ -18,23 +18,14 @@ $user_id = $_SESSION['user_id'];
 </head>
 
 <body>
+    <div id="loadingModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <p class="text-lg font-semibold">Processing...</p>
+        </div>
+    </div>
 
     <div class="container mx-auto p-6">
         <h1 class="text-2xl font-bold text-center mb-6">Regist faces</h1>
-
-        <div class="container mx-auto mt-2 p-8 bg-white rounded-lg shadow-lg">
-            <p class="mb-4">Welcome! Before you proceed to the face capture, please read the following instructions:</p>
-            <ul class="list-disc pl-5 mb-4">
-                <li>Ensure you are in a well-lit area.</li>
-                <li>Position your face directly in front of the camera for optimal capture.</li>
-                <li>The system will capture a total of 5 images:</li>
-                <ul class="list-disc pl-5">
-                    <li>5 images facing straight ahead.</li>
-                </ul>
-                <li>Click the "Ready" button when you are prepared to start capturing.</li>
-            </ul>
-           
-        </div>
 
         <div id="message" class="mt-4 text-green-500"></div>
 
@@ -55,14 +46,14 @@ $user_id = $_SESSION['user_id'];
         <input type="hidden" name="user_id" id="user-id" value="<?= $user_id ?>">
 
         <div class="mt-4 flex flex-col items-center space-y-4">
-    <button onclick="regist()" type="button" class="bg-purple-500 text-white px-3 py-2 rounded-md">Regist Images</button>
-    <button onclick="window.location.href='login.php'" type="button" class="bg-purple-500 text-white px-3 py-2 rounded-md">Home</button>
-</div>
+            <button onclick="regist()" type="button" class="bg-purple-500 text-white px-3 py-2 rounded-md">Regist Images</button>
+            <button onclick="window.location.href='login.php'" type="button" class="bg-white text-sky-500 px-3 py-2 rounded-md">Home</button>
+        </div>
 
-   
 
-    <script src="../js/env.js" defer></script>
-    <script src="../js/regist_face.js" defer></script>
+
+        <script src="../js/env.js" defer></script>
+        <script src="../js/regist_face.js" defer></script>
 </body>
 
 </html>
